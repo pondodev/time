@@ -13,6 +13,12 @@ public class PlayerController : MonoBehaviour
     Vector3 moveDir = Vector3.zero;
     Rigidbody rb;
 
+    [Header("Misc")]
+    public Light backLight;
+    public Material backdrop;
+
+    [HideInInspector] public Vector3 spawnPoint;
+    
     Camera camera;
 
     // Initialise singleton, throw error if there's more than one instance
@@ -29,6 +35,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         camera = Camera.main;
+        spawnPoint = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -47,15 +54,24 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = Vector3.zero;
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
+            GetComponent<Animator>().Play("player_jump");
             Time.timeScale = 1.0f;
             Time.fixedDeltaTime = 0.02f;
         }
 
-        // Lerp background colour based on time scale
-        camera.backgroundColor = Color.
-            Lerp(camera.backgroundColor,
-                new Vector4(Time.timeScale, Time.timeScale, Time.timeScale, 1.0f),
+        // Lerp background colour and light intensity based on time scale
+        float colourVal = Mathf.Clamp(Time.timeScale, 0.5f, 0.9f);
+        backLight.intensity = 5 - (Time.timeScale * 5);
+        backdrop.color = Color.
+            Lerp(backdrop.color,
+                new Vector4(colourVal, colourVal, colourVal, 1.0f),
                 20.0f * Time.deltaTime);
+
+        // Change PostFX profile when entering and exiting slow mo
+        if (Time.timeScale == 1.0f)
+            camera.GetComponent<CameraController>().SetSlowMoPostFX(false);
+        else
+            camera.GetComponent<CameraController>().SetSlowMoPostFX(true);
 
         rb.transform.Translate(moveDir * speed * Time.deltaTime); // Apply movement
     }
