@@ -32,18 +32,4 @@ public class CameraController : MonoBehaviour
             GetComponent<PostProcessingBehaviour>().profile = postfxProfiles[0];
         }
     }
-
-    /*public IEnumerator SetSlowMoPostFX (bool toggle)
-    {
-        if (toggle)
-        {
-            yield return new WaitForSeconds(0.1f);
-            GetComponent<PostProcessingBehaviour>().profile = postfxProfiles[1];
-        }
-        else
-        {
-            yield return new WaitForSeconds(0.1f);
-            GetComponent<PostProcessingBehaviour>().profile = postfxProfiles[0];
-        }
-    }*/
 }
