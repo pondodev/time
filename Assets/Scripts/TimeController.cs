@@ -5,6 +5,7 @@ using UnityEngine;
 public class TimeController : MonoBehaviour
 {
     public static TimeController instance { get; private set; }
+    CameraController cc;
 
     public Material backdrop;
 
@@ -23,6 +24,7 @@ public class TimeController : MonoBehaviour
     void Start ()
     {
         camera = Camera.main;
+        cc = CameraController.instance;
 	}
 	
 	// Update is called once per frame
@@ -35,9 +37,9 @@ public class TimeController : MonoBehaviour
 
         // Change PostFX profile when entering and exiting slow mo
         if (Time.timeScale == 1.0f)
-            camera.GetComponent<CameraController>().SetSlowMoPostFX(false);
+            cc.SetSlowMoPostFX(false);
         else
-            camera.GetComponent<CameraController>().SetSlowMoPostFX(true);
+            cc.SetSlowMoPostFX(true);
 
         // Lerp background colour and light intensity based on time scale
         float colourVal = Mathf.Clamp(Time.timeScale, 0.5f, 0.9f);

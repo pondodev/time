@@ -5,15 +5,28 @@ using UnityEngine.PostProcessing;
 
 public class CameraController : MonoBehaviour
 {
+    public static CameraController instance { get; private set; }
+
     public PostProcessingProfile[] postfxProfiles;
 
     GameObject player;
+    PostProcessingBehaviour postFXBehaviour;
 
-	// Use this for initialization
-	void Start ()
+    // Initialise singleton, throw error if there's more than one instance
+    void Awake()
+    {
+        if (instance != null)
+            throw new System.Exception();
+
+        instance = this;
+    }
+
+    // Use this for initialization
+    void Start ()
     {
         player = PlayerController.instance.gameObject;
-	}
+        postFXBehaviour = GetComponent<PostProcessingBehaviour>();
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -25,11 +38,11 @@ public class CameraController : MonoBehaviour
     {
         if (toggle)
         {
-            GetComponent<PostProcessingBehaviour>().profile = postfxProfiles[1];
+            postFXBehaviour.profile = postfxProfiles[1];
         }
         else
         {
-            GetComponent<PostProcessingBehaviour>().profile = postfxProfiles[0];
+            postFXBehaviour.profile = postfxProfiles[0];
         }
     }
 }
