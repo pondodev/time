@@ -13,7 +13,6 @@ public class Spikes : MonoBehaviour
 
     void OnTriggerEnter (Collider col)
     {
-        col.transform.position = pc.spawnPoint;
-        pc.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        pc.Respawn();
     }
 }

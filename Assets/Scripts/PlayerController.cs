@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance { get; private set; }
     TimeController tc;
+    CameraController cc;
 
     [Header("Movement")]
     public float speed = 5.0f;
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
         camera = Camera.main;
         spawnPoint = transform.position;
         tc = TimeController.instance;
+        cc = CameraController.instance;
 	}
 	
 	// Update is called once per frame
@@ -46,6 +48,11 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButton("Horizontal")) // Set timescale to 1 when we start moving
             tc.SetTimeScale(1.0f);
+
+        if (Input.GetButtonDown("Horizontal"))
+            cc.SetSlowMoPostFX(false);
+        else if (Input.GetButtonUp("Horizontal"))
+            cc.SetSlowMoPostFX(true);
 
         if (Input.GetButtonDown("Jump")) // Set timescale to 1 and start jump animation
         {
@@ -66,5 +73,12 @@ public class PlayerController : MonoBehaviour
         }
 
         rb.velocity = new Vector3(moveDir * speed * Time.deltaTime, rb.velocity.y, 0.0f); // Apply movement
+    }
+
+    public void Respawn ()
+    {
+        cc.SetBGColour(Color.red);
+        transform.position = spawnPoint;
+        rb.velocity = Vector3.zero;
     }
 }

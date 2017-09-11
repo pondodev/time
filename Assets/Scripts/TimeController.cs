@@ -33,21 +33,6 @@ public class TimeController : MonoBehaviour
         // Lerp time scale down and adjust fixedDeltaTime to allow for physics to continue making 50 checks a second
         Time.timeScale = Mathf.Lerp(Time.timeScale, 0.05f, 0.2f);
         Time.fixedDeltaTime = Time.timeScale * 0.02f;
-
-
-        // Change PostFX profile when entering and exiting slow mo
-        if (Time.timeScale == 1.0f)
-            cc.SetSlowMoPostFX(false);
-        else
-            cc.SetSlowMoPostFX(true);
-
-        // Lerp background colour and light intensity based on time scale
-        float colourVal = Mathf.Clamp(Time.timeScale, 0.5f, 0.9f);
-
-        backdrop.color = Color.
-            Lerp(backdrop.color,
-                new Vector4(colourVal, colourVal, colourVal, 1.0f),
-                20.0f * Time.deltaTime);
     }
 
     public void SetTimeScale (float val)
