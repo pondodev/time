@@ -1122,6 +1122,11 @@ Prefab:
       propertyPath: m_ProbeAnchor
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 114604351520243962, guid: 4879a8df1beb6d940ab4da5e4710b449,
+        type: 2}
+      propertyPath: speed
+      value: 1000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4879a8df1beb6d940ab4da5e4710b449, type: 2}
   m_IsPrefabParent: 0

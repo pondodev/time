@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public float jumpSpeed = 8.0f;
 
     float moveDir = 0.0f;
+    bool jumping;
     Rigidbody rb;
 
     [Header("Misc")]
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
         {
             GetComponent<Animator>().Play("player_jump");
             tc.SetTimeScale(1.0f);
+            jumping = true;
         }
 
         backLight.intensity = 5 - (Time.timeScale * 5);
@@ -66,10 +68,11 @@ public class PlayerController : MonoBehaviour
     // Used for all physics related calculations
     void FixedUpdate ()
     {
-        if (Input.GetButtonDown("Jump")) // Add force upwards when jumping
+        if (/*Input.GetButtonDown("Jump")*/jumping) // Add force upwards when jumping
         {
             rb.velocity = new Vector3(rb.velocity.x, 0.0f, 0.0f);
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
+            jumping = false;
         }
 
         rb.velocity = new Vector3(moveDir * speed * Time.deltaTime, rb.velocity.y, 0.0f); // Apply movement
