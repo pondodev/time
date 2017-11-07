@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public Vector3 spawnPoint;
     
     Camera camera;
+    AudioSource music;
+    AudioHighPassFilter highPassFilter;
+    AudioReverbFilter reverb;
 
     // Initialise singleton, throw error if there's more than one instance
     void Awake ()
@@ -40,6 +43,9 @@ public class PlayerController : MonoBehaviour
         spawnPoint = transform.position;
         tc = TimeController.instance;
         cc = CameraController.instance;
+        music = camera.GetComponent<AudioSource>();
+        highPassFilter = camera.GetComponent<AudioHighPassFilter>();
+        reverb = camera.GetComponent<AudioReverbFilter>();
 	}
 	
 	// Update is called once per frame
@@ -48,7 +54,14 @@ public class PlayerController : MonoBehaviour
         moveDir = Input.GetAxis("Horizontal"); // Store movement value
 
         if (Input.GetButton("Horizontal")) // Set timescale to 1 when we start moving
+        {
             tc.SetTimeScale(1.0f);
+            music.volume = Mathf.Lerp(music.volume, 1, 0.01f);
+        }
+        else
+        {
+            music.volume = Mathf.Lerp(music.volume, 0.3f, 0.01f);
+        }
 
         if (Input.GetButtonDown("Horizontal"))
             cc.SetSlowMoPostFX(false);
@@ -63,12 +76,23 @@ public class PlayerController : MonoBehaviour
         }
 
         backLight.intensity = 5 - (Time.timeScale * 5);
+        //music.volume = Mathf.Clamp(Time.timeScale, 0.3f, 1.0f);
+        if (Time.timeScale < 1.0f)
+        {
+            highPassFilter.enabled = true;
+            reverb.enabled = true;
+        }
+        else
+        {
+            highPassFilter.enabled = false;
+            reverb.enabled = false;
+        }
     }
 
     // Used for all physics related calculations
     void FixedUpdate ()
     {
-        if (/*Input.GetButtonDown("Jump")*/jumping) // Add force upwards when jumping
+        if (jumping) // Add force upwards when jumping
         {
             rb.velocity = new Vector3(rb.velocity.x, 0.0f, 0.0f);
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
